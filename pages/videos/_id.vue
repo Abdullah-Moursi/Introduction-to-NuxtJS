@@ -5,31 +5,18 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
-  data () {
-    return {
-      videos: [
-        {
-          id: '16',
-          name: 'V'
-        },
-        {
-          id: '1',
-          name: 'X'
-        },
-        {
-          id: '71',
-          name: 'Z'
-        }
-      ]
-    }
+  async fetch ({ $axios, params, store }) {
+    let response = await $axios.get(`/videos/${params.id}`)
+    let video = response.data.data.attributes
+
+store.commit('SET_CURRENT_VIDEO', video)
   },
   computed: {
-    video () {
-      return this.videos.find(
-        v => v.id === this.$route.params.id
-      )
-    }
+    ...mapState({
+      video: 'currentVideo'
+    })
   }
 }
 </script>

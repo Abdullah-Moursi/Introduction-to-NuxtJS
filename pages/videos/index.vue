@@ -2,44 +2,25 @@
   <div class="app">
     <nuxt-child />
     <h1>videos</h1>
-    <ul v-for="video in videos" :key="video.id">
+    <div v-for="video in videos" :key="video.id">
       <nuxt-link :to="`/videos/${video.id}`">
-      {{
-        video.name
-      }}
+        {{ video.name }}
       </nuxt-link>
-    </ul>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
-    return {
-      videos: [
-        {
-          id: '16',
-          name: 'V'
-        },
-        {
-          id: '1',
-          name: 'X'
-        },
-        {
-          id: '71',
-          name: 'Z'
-        }
-      ]
-    }
+  async fetch({$axios, store}) {
+    let response = await $axios.get('/videos')
+    let videos = response.data.data.map(v => v.attributes)
+
+    store.commit('SET_VIDEOS', videos)
   },
-  computed: {
-    video () {
-      return this.videos.find(
-        v => v.id === this.$route.params.id
-      )
-    }
-  }
 }
 </script>
 
 <style></style>
+// computed: { // video () { // return this.videos.find( // v => v.id ===
+this.$route.params.id // ) // }
